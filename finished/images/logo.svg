@@ -1,0 +1,40 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="96" y1="64" x2="416" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF3D6"/>
+      <stop offset="1" stop-color="#FFE1B3"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="154" y1="182" x2="368" y2="338" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB347"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+    <linearGradient id="steam" x1="226" y1="102" x2="302" y2="198" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD9A3" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0.2"/>
+    </linearGradient>
+    <filter id="shadow" x="96" y="118" width="328" height="250" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#C2410C" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="216" fill="url(#bg)"/>
+  <ellipse cx="256" cy="388" rx="118" ry="22" fill="#D6A46B" fill-opacity="0.18"/>
+
+  <g filter="url(#shadow)">
+    <path d="M160 204C160 190.745 170.745 180 184 180H308C321.255 180 332 190.745 332 204V269C332 311.526 297.526 346 255 346H237C194.474 346 160 311.526 160 269V204Z" fill="url(#cup)"/>
+    <path d="M327 202H352C384.585 202 411 228.415 411 261C411 293.585 384.585 320 352 320H329V286H350C363.807 286 375 274.807 375 261C375 247.193 363.807 236 350 236H327V202Z" fill="#FB923C"/>
+    <path d="M178 199C178 192.373 183.373 187 190 187H302C308.627 187 314 192.373 314 199V205H178V199Z" fill="#FFE5BF" fill-opacity="0.65"/>
+  </g>
+
+  <path d="M168 353C168 344.163 175.163 337 184 337H329C337.837 337 345 344.163 345 353V357C345 365.837 337.837 373 329 373H184C175.163 373 168 365.837 168 357V353Z" fill="#7C3AED" fill-opacity="0"/>
+  <path d="M168 353C168 344.163 175.163 337 184 337H329C337.837 337 345 344.163 345 353V357C345 365.837 337.837 373 329 373H184C175.163 373 168 365.837 168 357V353Z" fill="#B45309"/>
+
+  <g stroke="url(#steam)" stroke-linecap="round" stroke-width="13">
+    <path d="M216 182C197 161 201 142 218 124C230 111 235 96 229 78"/>
+    <path d="M258 174C240 152 245 132 263 113C275 100 279 84 274 66"/>
+    <path d="M301 182C283 160 289 141 308 123C321 111 326 95 322 78"/>
+  </g>
+
+  <circle cx="187" cy="144" r="10" fill="#FFF8ED" fill-opacity="0.78"/>
+  <circle cx="334" cy="128" r="8" fill="#FFF8ED" fill-opacity="0.62"/>
+</svg>

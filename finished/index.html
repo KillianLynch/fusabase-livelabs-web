@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Share</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "fusabase/app": "../node_modules/fusabase/dist/app/src/index.js",
+          "fusabase/oracledb": "../node_modules/fusabase/dist/oracledb/src/index.js",
+          "fusabase/auth": "../node_modules/fusabase/dist/auth/src/index.js",
+          "fusabase/storage": "../node_modules/fusabase/dist/storage/src/index.js",
+          "tslib": "./vendor/tslib.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="navbar-wrapper">
+    <nav class="navbar">
+      <a class="navbar-brand" href="#">
+        <img src="./images/logo.svg" alt="" class="navbar-logo" />
+        RecipeShare
+      </a>
+      <div class="navbar-right">
+        <button id="uploadRecipeButton" class="btn btn-primary" type="button">Upload Recipe</button>
+        <div id="authSection" class="auth-section" hidden>
+          <div id="authSignedOut">
+            <button id="authToggleButton" class="btn btn-outline" type="button">Sign in</button>
+          </div>
+          <div id="authPopup" class="auth-popup" hidden>
+            <div class="auth-popup-content">
+              <input id="authEmail" type="email" placeholder="Email" class="auth-input" />
+              <input id="authPassword" type="password" placeholder="Password" class="auth-input" />
+              <button id="signInButton" class="btn btn-primary" type="button">Sign in</button>
+              <button id="signUpButton" class="btn btn-outline" type="button">Create account</button>
+            </div>
+          </div>
+          <div id="authSignedIn" class="auth-signed-in" hidden>
+            <span id="authUserEmail" class="auth-user-email"></span>
+            <button id="signOutButton" class="btn btn-outline" type="button">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+    <header class="hero">
+      <p class="hero-text">Build a full-stack recipe app powered by Fusabase</p>
+    </header>
+
+    <div class="status-bar">
+      <p id="statusBanner" class="status-message status-info">Initializing app...</p>
+    </div>
+
+    <main class="content">
+      <div class="section-header">
+        <h2 class="section-title">Latest Recipes</h2>
+        <div id="categoryPills" class="category-pills">
+          <button class="pill pill-active" data-category="" type="button">All</button>
+          <button class="pill" data-category="Breakfast" type="button">Breakfast</button>
+          <button class="pill" data-category="Lunch" type="button">Lunch</button>
+          <button class="pill" data-category="Dinner" type="button">Dinner</button>
+          <button class="pill" data-category="Dessert" type="button">Dessert</button>
+        </div>
+      </div>
+
+      <div class="cards-layout">
+        <section class="card recipes-card">
+          <div class="card-header">
+            <div>
+              <p class="card-kicker">Recipes</p>
+              <span id="recipeCount" class="badge">0</span>
+            </div>
+            <div class="card-actions">
+              <button id="seedButton" class="btn btn-primary btn-sm" type="button" hidden>Seed demo recipes</button>
+              <button id="refreshButton" class="btn btn-outline btn-sm" type="button">Refresh</button>
+            </div>
+          </div>
+          <div id="recipeList" class="recipe-list">
+            <p class="empty-state">No recipes yet</p>
+          </div>
+        </section>
+
+        <section class="card detail-card">
+          <div class="card-header">
+            <p class="card-kicker">Details</p>
+          </div>
+          <div id="recipeDetail" class="detail-panel">
+            <p class="empty-state">Select a recipe to view details.</p>
+          </div>
+
+          <form id="ratingForm" class="rating-form" autocomplete="off" hidden>
+            <h4>Add a Rating</h4>
+            <p id="ratingAuthPrompt" class="auth-prompt">Sign in to add ratings</p>
+            <fieldset id="ratingFields" class="form-stack" disabled>
+              <label class="form-field">
+                <span>Rating</span>
+                <select id="ratingValue" name="rating" class="form-input">
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </select>
+              </label>
+
+              <label class="form-field">
+                <span>Comment</span>
+                <textarea id="ratingComment" name="comment" rows="3" class="form-input" required></textarea>
+              </label>
+
+              <button class="btn btn-primary" type="submit">Save rating</button>
+            </fieldset>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <div id="recipeModal" class="modal-overlay" hidden>
+      <div class="modal">
+        <div class="modal-header">
+          <div>
+            <p class="card-kicker">Recipe</p>
+            <h3>Recipe details</h3>
+          </div>
+          <button id="modalCloseButton" class="modal-close" type="button" aria-label="Close">&times;</button>
+        </div>
+        <p class="modal-info">Share your favorite recipe with the community.</p>
+        <form id="recipeForm" class="form-stack" autocomplete="off">
+          <p id="recipeAuthPrompt" class="auth-prompt">Sign in to create recipes</p>
+          <fieldset id="recipeFields" class="form-stack" disabled>
+            <label class="form-field">
+              <span>Title</span>
+              <input id="recipeTitle" name="title" type="text" class="form-input" required />
+            </label>
+
+            <label class="form-field">
+              <span>Description</span>
+              <textarea id="recipeDescription" name="description" rows="2" class="form-input" required></textarea>
+            </label>
+
+            <label class="form-field">
+              <span>Category</span>
+              <select id="recipeCategory" name="category" class="form-input">
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner" selected>Dinner</option>
+                <option value="Dessert">Dessert</option>
+              </select>
+            </label>
+
+            <label class="form-field">
+              <span>Prep time (minutes)</span>
+              <input id="recipePrepTime" name="prepTime" type="number" min="5" step="5" value="30" class="form-input" required />
+            </label>
+
+            <label class="form-field">
+              <span>Ingredients (one per line)</span>
+              <textarea id="recipeIngredients" name="ingredients" rows="4" class="form-input" placeholder="2 cups flour&#10;1 cup sugar&#10;1/2 cup chocolate chips"></textarea>
+            </label>
+
+            <label class="form-field">
+              <span>Instructions</span>
+              <textarea id="recipeInstructions" name="instructions" rows="4" class="form-input" required></textarea>
+            </label>
+
+            <label class="form-field" id="modalPhotoField">
+              <span>Photo</span>
+              <input id="modalPhotoFile" name="photo" type="file" accept="image/*" class="form-input" />
+            </label>
+
+            <button class="btn btn-primary" type="submit">Publish recipe</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span class="footer-brand">RecipeShare</span>
+      <span class="footer-copy">2026 Workshop Demo</span>
+    </footer>
+
+    <script type="module" src="./scripts/app.js"></script>
+  </body>
+</html>
