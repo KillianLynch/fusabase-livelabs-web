@@ -6,8 +6,6 @@ The workshop instructions are published on Oracle LiveLabs:
 
 **[RecipeShare on LiveLabs (Web)](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4404)**
 
-The workshop markdown source lives in [`KillianLynch/fusabase-livelabs`](https://github.com/KillianLynch/fusabase-livelabs/tree/main/web/recipeShare/workshop).
-
 ## Prerequisites
 
 - Node.js 18 or later
