@@ -1,6 +1,12 @@
-# Fusabase Recipe Share Workshop
+# Fusabase Recipe Share Workshop — Web
 
-This repository contains the Fusabase Recipe Share workshop, learner starter app, and finished reference implementation.
+This repository contains the **starter app**, **finished reference implementation**, and **per-lab checkpoints** for the Fusabase Recipe Share workshop (Web edition).
+
+The workshop instructions are published on Oracle LiveLabs:
+
+**[RecipeShare on LiveLabs (Web)](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4404)**
+
+The workshop markdown source lives in [`KillianLynch/fusabase-livelabs`](https://github.com/KillianLynch/fusabase-livelabs/tree/main/web/recipeShare/workshop).
 
 ## Prerequisites
 
@@ -10,14 +16,14 @@ This repository contains the Fusabase Recipe Share workshop, learner starter app
 
 ## Quick Start
 
-Clone the LiveLabs repository and move into the RecipeShare workshop folder:
+Clone this starter-app repo and move into it:
 
 ```bash
 git clone https://github.com/KillianLynch/fusabase-livelabs-web.git
 cd fusabase-livelabs-web
 ```
 
-Install the Fusabase JavaScript SDK from the workshop root:
+Install the Fusabase JavaScript SDK:
 
 ```bash
 npm install fusabase
@@ -29,7 +35,7 @@ Install Live Server if you do not already have it:
 npm install -g live-server
 ```
 
-Then serve the RecipeShare workshop root:
+Serve the repo root:
 
 ```bash
 live-server --port=8000 --host=localhost
@@ -37,17 +43,16 @@ live-server --port=8000 --host=localhost
 
 Open the entry point you need:
 
-- Workshop shell: `http://localhost:8000/recipeshare/workshops/desktop/index.html`
 - Starter app: `http://localhost:8000/starter/`
 - Finished app: `http://localhost:8000/finished/`
 
-Run the install and Live Server commands from `web/recipeShare`. The starter and finished apps both resolve the SDK from the shared root `node_modules/fusabase` folder, so one `npm install fusabase` makes both apps work.
+The starter and finished apps both resolve the SDK from the shared root `node_modules/fusabase` folder, so one `npm install fusabase` makes both apps work.
 
 ## Repository Layout
 
-- `recipeshare/`: Oracle LiveLabs workshop content and manifests
-- `starter/`: learner editing surface for the labs
-- `finished/`: completed reference implementation
+- `starter/` — learner editing surface for the labs
+- `finished/` — completed reference implementation
+- `checkpoints/` — clean per-lab snapshots of the editable files
 
 ## Workshop Flow
 
@@ -62,8 +67,6 @@ The workshop currently includes:
 - Lab 5: Write Recipe Data
 - Lab 6: Photo Upload
 - Lab 7: Security Rules
-
-The setup lab is `recipeshare/start-environment/set-up-fusabase.md`.
 
 ## Starter App
 
