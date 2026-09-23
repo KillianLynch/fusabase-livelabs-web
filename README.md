@@ -65,6 +65,8 @@ The workshop currently includes:
 - Lab 5: Write Recipe Data
 - Lab 6: Photo Upload
 - Lab 7: Security Rules
+- Lab 8: Google Social Sign-In
+- Lab 9: GitHub Social Sign-In
 
 ## Starter App
 
@@ -72,14 +74,14 @@ Learners edit these files during the workshop:
 
 - `starter/fusabase-config.js`: paste the generated Fusabase app config
 - `starter/scripts/app.js`: implement the SDK TODOs directly in the real app flows for reads, auth, writes, edit, and photo upload
-- `starter/index.html`: unhide the photo field in Lab 6
+- `starter/index.html`: unhide the photo field in Lab 6, add Google sign-in in Lab 8, and add GitHub sign-in in Lab 9
 - `starter/scripts/data.js`: prebuilt support helpers used by the app
 
 The starter app is intentionally incomplete. Preserve TODO markers unless a task is specifically completing that lab step.
 
 ## Finished App
 
-The finished app shows the target workshop behavior. It connects with `finished/fusabase-config.js`, seeds demo recipe data, lists and filters recipes, supports auth, creates and edits recipes, records ratings, and uploads recipe photos.
+The finished app shows the target workshop behavior. It connects with `finished/fusabase-config.js`, seeds demo recipe data, lists and filters recipes, supports email/password, Google, and GitHub auth, creates and edits recipes, records ratings, and uploads recipe photos.
 
 Main files:
 

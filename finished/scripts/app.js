@@ -14,9 +14,12 @@ import {
   where
 } from "fusabase/oracledb";
 import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signInWithPopup,
   signInWithEmailAndPassword,
   signOut
 } from "fusabase/auth";
@@ -79,6 +82,8 @@ const el = {
   authPassword: document.querySelector("#authPassword"),
   authUserEmail: document.querySelector("#authUserEmail"),
   signInButton: document.querySelector("#signInButton"),
+  signInWithGoogleButton: document.querySelector("#signInWithGoogleButton"),
+  signInWithGithubButton: document.querySelector("#signInWithGithubButton"),
   signUpButton: document.querySelector("#signUpButton"),
   signOutButton: document.querySelector("#signOutButton"),
   // Write form elements
@@ -352,6 +357,18 @@ function bindEvents() {
       await signInWithEmailAndPassword(auth, el.authEmail.value, el.authPassword.value);
       el.authEmail.value = "";
       el.authPassword.value = "";
+    });
+  });
+
+  el.signInWithGoogleButton.addEventListener("click", () => {
+    runAction("Signed in with Google.", async () => {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    });
+  });
+
+  el.signInWithGithubButton.addEventListener("click", () => {
+    runAction("Signed in with GitHub.", async () => {
+      await signInWithPopup(auth, new GithubAuthProvider());
     });
   });
 

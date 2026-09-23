@@ -35,7 +35,8 @@
               <input id="authEmail" type="email" placeholder="Email" class="auth-input" />
               <input id="authPassword" type="password" placeholder="Password" class="auth-input" />
               <button id="signInButton" class="btn btn-primary" type="button">Sign in</button>
-              <!-- Lab 8 TODO: Add the Google sign-in button here. -->
+              <button id="signInWithGoogleButton" class="btn btn-outline" type="button">Sign in with Google</button>
+              <button id="signInWithGithubButton" class="btn btn-outline" type="button">Sign in with GitHub</button>
               <button id="signUpButton" class="btn btn-outline" type="button">Create account</button>
             </div>
           </div>
@@ -170,7 +171,7 @@
               <textarea id="recipeInstructions" name="instructions" rows="4" class="form-input" required></textarea>
             </label>
 
-            <label class="form-field" id="modalPhotoField" hidden>
+            <label class="form-field" id="modalPhotoField">
               <span>Photo</span>
               <input id="modalPhotoFile" name="photo" type="file" accept="image/*" class="form-input" />
             </label>

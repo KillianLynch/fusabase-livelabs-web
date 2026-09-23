@@ -4,7 +4,6 @@ import {
   addDoc,
   collection,
   doc,
-  getDoc,
   getDocs,
   getOracledb,
   limit,
@@ -265,7 +264,8 @@ function bindEvents() {
         //   description: formInput.description.trim(),
         //   category: formInput.category,
         //   prepTime: Number(formInput.prepTime),
-        //   instructions: formInput.instructions.trim()
+        //   instructions: formInput.instructions.trim(),
+        //   ingredients: formInput.ingredients
         // });
         throw new Error("Complete Lab 7 to edit recipes.");
 
