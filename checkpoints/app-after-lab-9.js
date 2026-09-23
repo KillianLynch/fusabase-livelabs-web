@@ -14,10 +14,12 @@ import {
   where
 } from "fusabase/oracledb";
 import {
-  // Lab 8 TODO: Add GoogleAuthProvider and signInWithPopup to this import.
+  GithubAuthProvider,
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signInWithPopup,
   signInWithEmailAndPassword,
   signOut
 } from "fusabase/auth";
@@ -80,7 +82,8 @@ const el = {
   authPassword: document.querySelector("#authPassword"),
   authUserEmail: document.querySelector("#authUserEmail"),
   signInButton: document.querySelector("#signInButton"),
-  // Lab 8 TODO: Add the signInWithGoogleButton element here.
+  signInWithGoogleButton: document.querySelector("#signInWithGoogleButton"),
+  signInWithGithubButton: document.querySelector("#signInWithGithubButton"),
   signUpButton: document.querySelector("#signUpButton"),
   signOutButton: document.querySelector("#signOutButton"),
   // Photo field (hidden until Lab 6)
@@ -161,24 +164,20 @@ function closeModal() {
 async function refreshRecipes(selectRecipeId = state.activeRecipeId) {
   let result = null;
 
-  // ── Lab 3 TODO: Read recipes with the SDK ─────────
-  // Build a collection reference, add query constraints, run getDocs(),
-  // then map snapshot.docs into recipe objects.
-  //
-  // const constraints = [];
-  //
-  // if (state.filters.category) {
-  //   constraints.push(where("category", "==", state.filters.category));
-  // }
-  //
-  // constraints.push(orderBy("createdAt", "desc"));
-  // constraints.push(limit(24));
-  //
-  // const snapshot = await getDocs(
-  //   query(collection(db, "recipes"), ...constraints)
-  // );
-  //
-  // result = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const constraints = [];
+
+  if (state.filters.category) {
+    constraints.push(where("category", "==", state.filters.category));
+  }
+
+  constraints.push(orderBy("createdAt", "desc"));
+  constraints.push(limit(24));
+
+  const snapshot = await getDocs(
+    query(collection(db, "recipes"), ...constraints)
+  );
+
+  result = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
   const recipes = result ?? [];
   state.recipes = recipes;
@@ -263,17 +262,15 @@ function bindEvents() {
       runAction("Recipe updated.", async () => {
         // ── Lab 7 TODO: Edit a recipe with the SDK ───
         // Use doc() to point at this recipe, then call updateDoc().
-        //
-        // const recipeRef = doc(collection(db, "recipes"), state.editingRecipeId);
-        // await updateDoc(recipeRef, {
-        //   title: formInput.title.trim(),
-        //   description: formInput.description.trim(),
-        //   category: formInput.category,
-        //   prepTime: Number(formInput.prepTime),
-        //   instructions: formInput.instructions.trim(),
-        //   ingredients: formInput.ingredients
-        // });
-        throw new Error("Complete Lab 7 to edit recipes.");
+        const recipeRef = doc(collection(db, "recipes"), state.editingRecipeId);
+        await updateDoc(recipeRef, {
+          title: formInput.title.trim(),
+          description: formInput.description.trim(),
+          category: formInput.category,
+          prepTime: Number(formInput.prepTime),
+          instructions: formInput.instructions.trim(),
+          ingredients: formInput.ingredients
+        });
 
         el.recipeForm.reset();
         const editedId = state.editingRecipeId;
@@ -286,33 +283,27 @@ function bindEvents() {
 
         // ── Lab 5 TODO: Create recipes with the SDK ──
         // Use addDoc(collection(db, "recipes"), data) to save this form.
-        //
-        // recipeRef = await addDoc(collection(db, "recipes"), {
-        //   title: formInput.title.trim(),
-        //   description: formInput.description.trim(),
-        //   category: formInput.category,
-        //   prepTime: Number(formInput.prepTime),
-        //   instructions: formInput.instructions.trim(),
-        //   createdAt: Timestamp.now(),
-        //   ingredients: formInput.ingredients,
-        //   createdBy: auth.currentUser.email,
-        //   ownerId: auth.currentUser.uid
-        // });
-
-        if (!recipeRef) {
-          throw new Error("Complete Lab 5 to create recipes.");
-        }
+        recipeRef = await addDoc(collection(db, "recipes"), {
+          title: formInput.title.trim(),
+          description: formInput.description.trim(),
+          category: formInput.category,
+          prepTime: Number(formInput.prepTime),
+          instructions: formInput.instructions.trim(),
+          createdAt: Timestamp.now(),
+          ingredients: formInput.ingredients,
+          createdBy: auth.currentUser.email,
+          ownerId: auth.currentUser.uid
+        });
 
         const photoFile = fd.get("photo");
         if (photoFile && photoFile.size > 0) {
           // ── Lab 6 TODO: Upload the new recipe photo with the SDK ──
           // After adding this code, remove hidden from #modalPhotoField in index.html.
-          //
-          // storage = getStorage(app);
-          // const photoRef = ref(storage, `recipes/${recipeRef.id}/${photoFile.name}`);
-          // await uploadBytes(photoRef, photoFile, { contentType: photoFile.type || "image/png" });
-          // const photoURL = await getDownloadURL(photoRef);
-          // await updateDoc(doc(collection(db, "recipes"), recipeRef.id), { photoURL });
+          storage = getStorage(app);
+          const photoRef = ref(storage, `recipes/${recipeRef.id}/${photoFile.name}`);
+          await uploadBytes(photoRef, photoFile, { contentType: photoFile.type || "image/png" });
+          const photoURL = await getDownloadURL(photoRef);
+          await updateDoc(doc(collection(db, "recipes"), recipeRef.id), { photoURL });
         }
         el.recipeForm.reset();
         closeModal();
@@ -353,15 +344,13 @@ function bindEvents() {
       // ── Lab 5 TODO: Add ratings with the SDK ─────
       // Use doc() and addDoc(collection(recipeRef, "ratings"), ...) to save
       // a rating into the recipe's ratings subcollection.
-      //
-      // const recipeRef = doc(collection(db, "recipes"), state.activeRecipeId);
-      //
-      // await addDoc(collection(recipeRef, "ratings"), {
-      //   author: auth.currentUser.email,
-      //   rating: Number(fd.get("rating") ?? "5"),
-      //   comment: String(fd.get("comment") ?? "").trim()
-      // });
-      throw new Error("Complete Lab 5 to add ratings.");
+      const recipeRef = doc(collection(db, "recipes"), state.activeRecipeId);
+
+      await addDoc(collection(recipeRef, "ratings"), {
+        author: auth.currentUser.email,
+        rating: Number(fd.get("rating") ?? "5"),
+        comment: String(fd.get("comment") ?? "").trim()
+      });
 
       el.ratingForm.reset();
       await refreshRecipes(state.activeRecipeId);
@@ -383,20 +372,29 @@ function bindEvents() {
   el.signInButton.addEventListener("click", () => {
     runAction("Signed in.", async () => {
       // ── Lab 4 TODO: Sign in with the SDK ─────────
-      // await signInWithEmailAndPassword(auth, el.authEmail.value, el.authPassword.value);
-      throw new Error("Complete Lab 4 to sign in.");
+      await signInWithEmailAndPassword(auth, el.authEmail.value, el.authPassword.value);
 
       el.authEmail.value = "";
       el.authPassword.value = "";
     });
   });
 
-  // Lab 8 TODO: Add the Google popup sign-in listener here.
+  el.signInWithGoogleButton.addEventListener("click", () => {
+    runAction("Signed in with Google.", async () => {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    });
+  });
+
+  el.signInWithGithubButton.addEventListener("click", () => {
+    runAction("Signed in with GitHub.", async () => {
+      await signInWithPopup(auth, new GithubAuthProvider());
+    });
+  });
+
   el.signUpButton.addEventListener("click", () => {
     runAction("Account created.", async () => {
       // ── Lab 4 TODO: Create an account with the SDK ─
-      // await createUserWithEmailAndPassword(auth, el.authEmail.value, el.authPassword.value);
-      throw new Error("Complete Lab 4 to create an account.");
+      await createUserWithEmailAndPassword(auth, el.authEmail.value, el.authPassword.value);
 
       el.authEmail.value = "";
       el.authPassword.value = "";
@@ -406,8 +404,7 @@ function bindEvents() {
   el.signOutButton.addEventListener("click", () => {
     runAction("Signed out.", async () => {
       // ── Lab 4 TODO: Sign out with the SDK ────────
-      // await signOut(auth);
-      throw new Error("Complete Lab 4 to sign out.");
+      await signOut(auth);
     });
   });
 }
@@ -446,12 +443,12 @@ async function main() {
   await runAction("Connected to Fusabase.", connectAndLoad);
 
   // ── Lab 4 TODO: Start auth with the SDK ─────────
-  // auth = getAuth(app);
-  // onAuthStateChanged(auth, (user) => {
-  //   state.currentUser = user;
-  //   renderAuthState(el, user);
-  //   syncWriteForms();
-  // });
+  auth = getAuth(app);
+  onAuthStateChanged(auth, (user) => {
+    state.currentUser = user;
+    renderAuthState(el, user);
+    syncWriteForms();
+  });
 }
 
 main();
